@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.palo.it.forge.maven.superpoms</groupId>
         <artifactId>maven-superpom-plugins</artifactId>
-        <version>0.10</version>
+        <version>0.11-SNAPSHOT</version>
     </parent>
     
     
