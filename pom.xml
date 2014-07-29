@@ -23,7 +23,7 @@
     <groupId>org.palo.it.forge.maven.plugins</groupId>
     <artifactId>maven-jenkins-plugins</artifactId>
     <version>0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>maven-plugin</packaging>
 
 
     <url>${forge.project.url}</url>
