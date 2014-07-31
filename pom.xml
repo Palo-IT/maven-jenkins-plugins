@@ -21,7 +21,7 @@
     ============================================================================
     -->
     <groupId>org.palo.it.forge.maven.plugins</groupId>
-    <artifactId>maven-jenkins-plugins</artifactId>
+    <artifactId>maven-jenkins-plugin</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
