@@ -1,5 +1,6 @@
 package org.palo.it.forge.maven.plugins.jenkins.actions;
-
+//test for CI
+imp
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.palo.it.forge.maven.plugins.jenkins.exceptions.MavenJenkinsPluginsException;
