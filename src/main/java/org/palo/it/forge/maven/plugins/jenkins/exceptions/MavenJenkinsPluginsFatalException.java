@@ -17,26 +17,43 @@
  *   limitations under the License.
  *
  */
-package org.palo.it.forge.maven.plugins.jenkins.actions;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.palo.it.forge.maven.plugins.jenkins.exceptions.MavenJenkinsPluginsException;
-import org.palo.it.forge.maven.plugins.jenkins.models.ProjectInfoJenkins;
-import org.palo.it.forge.maven.plugins.jenkins.services.JenkinsService;
+package org.palo.it.forge.maven.plugins.jenkins.exceptions;
 
 /**
- * @goal update
+ * MavenJen
+ * 
  * @author pguillerm
- * @since 30 juil. 2014
+ * @since 5 août 2014
  */
-@Mojo(name = "update", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
-public class MojoUpdateJobs extends AbstractMojoCommons {
+public class MavenJenkinsPluginsFatalException extends RuntimeException {
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    @Override
-    protected void executePlugin(ProjectInfoJenkins info) throws MavenJenkinsPluginsException {
-        JenkinsService.getInstance().updateJobs(info);
+    /** The Constant serialVersionUID. */
+    private static final long serialVersionUID = -5653923025445086313L;
+
+    // =========================================================================
+    // CONSTRUCTORS
+    // =========================================================================
+    public MavenJenkinsPluginsFatalException() {
+        super();
     }
 
+    public MavenJenkinsPluginsFatalException(String message, Throwable cause, boolean enableSuppression,
+            boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
+
+    public MavenJenkinsPluginsFatalException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public MavenJenkinsPluginsFatalException(String message) {
+        super(message);
+    }
+
+    public MavenJenkinsPluginsFatalException(Throwable cause) {
+        super(cause);
+    }
 }

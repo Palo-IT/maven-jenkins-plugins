@@ -17,26 +17,20 @@
  *   limitations under the License.
  *
  */
-package org.palo.it.forge.maven.plugins.jenkins.actions;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.palo.it.forge.maven.plugins.jenkins.exceptions.MavenJenkinsPluginsException;
-import org.palo.it.forge.maven.plugins.jenkins.models.ProjectInfoJenkins;
-import org.palo.it.forge.maven.plugins.jenkins.services.JenkinsService;
+package org.palo.it.forge.maven.plugins.jenkins.models;
 
 /**
- * @goal update
+ * Templates
+ * 
  * @author pguillerm
- * @since 30 juil. 2014
+ * @since 5 août 2014
  */
-@Mojo(name = "update", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
-public class MojoUpdateJobs extends AbstractMojoCommons {
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
+public enum Templates implements TemplateName {
+    template_ci, template_release, template_snapshot;
+
     @Override
-    protected void executePlugin(ProjectInfoJenkins info) throws MavenJenkinsPluginsException {
-        JenkinsService.getInstance().updateJobs(info);
+    public String getName() {
+        return name() + ".ftl";
     }
 
 }

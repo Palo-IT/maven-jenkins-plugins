@@ -15,28 +15,57 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
- *
  */
-package org.palo.it.forge.maven.plugins.jenkins.actions;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.palo.it.forge.maven.plugins.jenkins.exceptions.MavenJenkinsPluginsException;
-import org.palo.it.forge.maven.plugins.jenkins.models.ProjectInfoJenkins;
-import org.palo.it.forge.maven.plugins.jenkins.services.JenkinsService;
+package org.palo.it.forge.maven.plugins.jenkins.models;
+
+import java.io.Serializable;
 
 /**
- * @goal update
+ * MavenUser
+ * 
  * @author pguillerm
- * @since 30 juil. 2014
+ * @since 5 août 2014
  */
-@Mojo(name = "update", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
-public class MojoUpdateJobs extends AbstractMojoCommons {
+public class MavenUser implements Serializable {
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    @Override
-    protected void executePlugin(ProjectInfoJenkins info) throws MavenJenkinsPluginsException {
-        JenkinsService.getInstance().updateJobs(info);
+    private String email;
+
+    private String role;
+
+    // =========================================================================
+    // CONSTRUCTORS
+    // =========================================================================
+
+    public MavenUser() {
+        super();
+    }
+
+    public MavenUser(String email, String role) {
+        super();
+        this.email = email;
+        this.role = role;
+    }
+
+    // =========================================================================
+    // GETTERS & SETTERS
+    // =========================================================================
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
 }

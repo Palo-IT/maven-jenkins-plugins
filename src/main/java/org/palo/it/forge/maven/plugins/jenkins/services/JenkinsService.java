@@ -16,16 +16,25 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- *   Links:
- *   ======
- *   Git      : https://github.com/Palo-IT/Devoxx2014Raspberry
  */
 package org.palo.it.forge.maven.plugins.jenkins.services;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.palo.it.forge.maven.plugins.jenkins.api.ScmType;
 import org.palo.it.forge.maven.plugins.jenkins.exceptions.MavenJenkinsPluginsException;
 import org.palo.it.forge.maven.plugins.jenkins.models.ProjectInfoJenkins;
+import org.palo.it.forge.maven.plugins.jenkins.models.Templates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import freemarker.template.TemplateException;
 
 /**
  * JenkinsService.
@@ -74,6 +83,30 @@ public class JenkinsService {
      */
     public void createJobs(final ProjectInfoJenkins info) throws MavenJenkinsPluginsException {
         assertInfo(info);
+        final Map<String, Object> context = new HashMap<String, Object>();
+        context.put("project", info);
+        context.put("GIT", ScmType.GIT);
+        context.put("SVN", ScmType.SVN);
+
+        for (Templates template : Templates.values()) {
+            String templateRender = renderTemplate(template, context);
+            LOGGER.debug("template : \n {}",templateRender);
+        }
+
+        postToJenkins(info);
+    }
+
+    protected String renderTemplate(final Templates template, final Map<String, Object> context)
+            throws MavenJenkinsPluginsException {
+        String result = null;
+        try {
+            result = ServiceTemplating.getInstance().render(template, context);
+        } catch (TemplateException e) {
+            throw new MavenJenkinsPluginsException(e.getMessage(), e);
+        } catch (IOException e) {
+            throw new MavenJenkinsPluginsException(e.getMessage(), e);
+        }
+        return result;
     }
 
     /**
@@ -126,4 +159,26 @@ public class JenkinsService {
     // =========================================================================
     // PROTECTED
     // =========================================================================
+
+    protected void postToJenkins(final ProjectInfoJenkins info) {
+
+        final DefaultHttpClient httpclient = new DefaultHttpClient();
+
+        final URI urlJenkins = makeUrlForCreateJob(info);
+        final HttpPost post = new HttpPost(makeUrlForCreateJob(info));
+
+    }
+
+    private URI makeUrlForCreateJob(ProjectInfoJenkins info) {
+        URI result = null;
+        final StringBuilder rawResult = new StringBuilder();
+        rawResult.append(UrlUtils.getInstance().normalize(info.getJenkinsUrl()));
+        rawResult.append(UrlUtils.getInstance().normalize(info.getApiPath()));
+        try {
+            result = new URI(rawResult.toString());
+        } catch (URISyntaxException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return result;
+    }
 }

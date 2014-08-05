@@ -15,12 +15,12 @@
   <keepDependencies>false</keepDependencies>
   <properties/>
   
-  <#if forge.project.scm.type=='GIT'>
+  <#if project.scmType==GIT>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@2.0.3">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>${forge.project.scm.connection}</url>
+        <url>${project.scmConnection}</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -64,7 +64,7 @@
   
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.8">
-      <recipients>${project.users.mails}</recipients>
+      <recipients><#if project.users?has_content><#list project.users as user>${user.email} </#list></#if></recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>

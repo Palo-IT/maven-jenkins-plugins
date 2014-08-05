@@ -16,11 +16,11 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- *   Links:
- *   ======
- *   Git      : https://github.com/Palo-IT/Devoxx2014Raspberry
  */
 package org.palo.it.forge.maven.plugins.jenkins.models;
+
+import java.io.Serializable;
+import java.util.List;
 
 import org.palo.it.forge.maven.plugins.jenkins.api.ScmType;
 
@@ -30,20 +30,33 @@ import org.palo.it.forge.maven.plugins.jenkins.api.ScmType;
  * @author pguillerm
  * @since 29 juil. 2014
  */
-public final class ProjectInfoJenkins {
+public final class ProjectInfoJenkins implements Serializable {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private String  jenkinsUrl;
+    /** The Constant serialVersionUID. */
+    private static final long serialVersionUID = -6184410141480889066L;
 
-    private String  groupId;
+    private String            jenkinsUrl;
 
-    private String  artifactId;
+    private String            groupId;
 
-    private boolean isTrunk = true;
+    private String            artifactId;
 
-    private ScmType scmType;
+    private String            apiPath          = "/ci/createItem";
+
+    private boolean           isTrunk          = true;
+
+    private ScmType           scmType;
+
+    private String            scmConnection;
+
+    private String            scmCredentialsId;
+
+    private String            mavenHomeSetting = "/home/ci/maven/settings.xml";
+
+    private List<MavenUser>   users;
 
     // =========================================================================
     // CONSTRUCTORS
@@ -101,6 +114,54 @@ public final class ProjectInfoJenkins {
 
     public void setTrunk(boolean isTrunk) {
         this.isTrunk = isTrunk;
+    }
+
+    public String getApiPath() {
+        return apiPath;
+    }
+
+    public void setApiPath(String apiPath) {
+        this.apiPath = apiPath;
+    }
+
+    public ScmType getScmType() {
+        return scmType;
+    }
+
+    public void setScmType(ScmType scmType) {
+        this.scmType = scmType;
+    }
+
+    public String getScmConnection() {
+        return scmConnection;
+    }
+
+    public void setScmConnection(String scmConnection) {
+        this.scmConnection = scmConnection;
+    }
+
+    public String getScmCredentialsId() {
+        return scmCredentialsId;
+    }
+
+    public void setScmCredentialsId(String scmCredentialsId) {
+        this.scmCredentialsId = scmCredentialsId;
+    }
+
+    public String getMavenHomeSetting() {
+        return mavenHomeSetting;
+    }
+
+    public void setMavenHomeSetting(String mavenHomeSetting) {
+        this.mavenHomeSetting = mavenHomeSetting;
+    }
+
+    public List<MavenUser> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<MavenUser> users) {
+        this.users = users;
     }
 
 }

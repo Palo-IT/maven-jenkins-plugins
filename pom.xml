@@ -37,5 +37,25 @@
         <forge.project.scm.type.git />
         <forge.project.url>https://github.com/Palo-IT/maven-jenkins-plugins</forge.project.url>
         <forge.project.scm.connection>git@github.com:Palo-IT/maven-jenkins-plugins.git</forge.project.scm.connection>
+        <org.freemarker_freemarker.version>2.3.20</org.freemarker_freemarker.version>
     </properties>
+
+
+    <!--
+    ============================================================================
+    = PROPERTIES
+    ============================================================================
+    -->
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>${org.freemarker_freemarker.version}</version>
+        </dependency>
+    </dependencies>
 </project>

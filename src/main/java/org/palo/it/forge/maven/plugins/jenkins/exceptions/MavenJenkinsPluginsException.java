@@ -16,9 +16,6 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- *   Links:
- *   ======
- *   Git      : https://github.com/Palo-IT/Devoxx2014Raspberry
  */
 package org.palo.it.forge.maven.plugins.jenkins.exceptions;
 

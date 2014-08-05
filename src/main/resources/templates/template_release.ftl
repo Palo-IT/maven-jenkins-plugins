@@ -26,7 +26,7 @@
   
   <builders>
     <hudson.tasks.Shell>
-      <command>git clone ${forge.project.scm.connection}</command>
+      <command>git clone ${project.scmConnection}</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>cd ${project.artifactId}; mvn clean package deploy; mvn release:clean release:prepare release:perform --batch-mode</command>
@@ -35,7 +35,7 @@
   
    <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.8">
-      <recipients>${project.users.mails}</recipients>
+      <recipients><#if project.users?has_content><#list project.users as user>${user.email} </#list></#if></recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
