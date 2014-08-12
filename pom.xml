@@ -55,7 +55,6 @@
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
-            <version>${org.freemarker_freemarker.version}</version>
         </dependency>
     </dependencies>
 </project>

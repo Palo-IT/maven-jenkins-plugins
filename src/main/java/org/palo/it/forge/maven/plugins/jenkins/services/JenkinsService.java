@@ -25,8 +25,18 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.ContentType;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.palo.it.forge.maven.plugins.jenkins.api.ScmType;
 import org.palo.it.forge.maven.plugins.jenkins.exceptions.MavenJenkinsPluginsException;
 import org.palo.it.forge.maven.plugins.jenkins.models.ProjectInfoJenkins;
@@ -89,11 +99,16 @@ public class JenkinsService {
         context.put("SVN", ScmType.SVN);
 
         for (Templates template : Templates.values()) {
-            String templateRender = renderTemplate(template, context);
-            LOGGER.debug("template : \n {}",templateRender);
+            final String templateRender = renderTemplate(template, context);
+            try {
+                postJenkinsJob(template, templateRender, info);
+            } catch (ClientProtocolException e) {
+                throw new MavenJenkinsPluginsException(e.getMessage(), e);
+            } catch (IOException e) {
+                throw new MavenJenkinsPluginsException(e.getMessage(), e);
+            }
         }
 
-        postToJenkins(info);
     }
 
     protected String renderTemplate(final Templates template, final Map<String, Object> context)
@@ -160,20 +175,62 @@ public class JenkinsService {
     // PROTECTED
     // =========================================================================
 
-    protected void postToJenkins(final ProjectInfoJenkins info) {
+    /**
+     * Post jenkins job.
+     * 
+     * @param template the template
+     * @param templateRender the template render
+     * @param info the info
+     * @throws MavenJenkinsPluginsException the maven jenkins plugins exception
+     * @throws IOException
+     * @throws ClientProtocolException
+     */
+    protected void postJenkinsJob(final Templates template, final String templateRender, final ProjectInfoJenkins info)
+            throws MavenJenkinsPluginsException, ClientProtocolException, IOException {
 
-        final DefaultHttpClient httpclient = new DefaultHttpClient();
+        final URI urlJenkins = makeUrlForCreateJob(info, template);
+        if (urlJenkins == null) {
+            throw new MavenJenkinsPluginsException("jenkins url musn't be null");
+        }
 
-        final URI urlJenkins = makeUrlForCreateJob(info);
-        final HttpPost post = new HttpPost(makeUrlForCreateJob(info));
+        //@formatter:off
+        final CredentialsProvider credentials = new BasicCredentialsProvider();
+        credentials.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(info.getJenkinsLogin(), info.getJenkinsPassword()));
+        
+        final CloseableHttpClient httpClient = HttpClientBuilder.create()
+                                                                .setDefaultCredentialsProvider(credentials)
+                                                                .build();
+        
+        final RequestConfig requestConfig = RequestConfig.custom()
+                                                         .setConnectionRequestTimeout(1000)
+                                                         .setConnectTimeout(1000)
+                                                         .setSocketTimeout(1000)
+                                                         .build();
+        //@formatter:on
+
+        final HttpPost httpPostRequest = new HttpPost(urlJenkins);
+        httpPostRequest.setConfig(requestConfig);
+        httpPostRequest.setEntity(new ByteArrayEntity(templateRender.getBytes(), ContentType.APPLICATION_XML));
+
+        HttpResponse response = httpClient.execute(httpPostRequest);
+        
+        LOGGER.info("response : {}",response);
+        
 
     }
 
-    private URI makeUrlForCreateJob(ProjectInfoJenkins info) {
+    private URI makeUrlForCreateJob(ProjectInfoJenkins info, final Templates template) {
         URI result = null;
         final StringBuilder rawResult = new StringBuilder();
         rawResult.append(UrlUtils.getInstance().normalize(info.getJenkinsUrl()));
         rawResult.append(UrlUtils.getInstance().normalize(info.getApiPath()));
+        rawResult.append("?name=");
+        rawResult.append(info.getGroupId());
+        rawResult.append("_");
+        rawResult.append(info.getArtifactId());
+        rawResult.append("_");
+        rawResult.append(template.getShortName());
+
         try {
             result = new URI(rawResult.toString());
         } catch (URISyntaxException e) {

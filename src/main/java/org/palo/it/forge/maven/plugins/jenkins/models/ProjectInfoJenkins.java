@@ -44,7 +44,7 @@ public final class ProjectInfoJenkins implements Serializable {
 
     private String            artifactId;
 
-    private String            apiPath          = "/ci/createItem";
+    private String            apiPath          = "/createItem";
 
     private boolean           isTrunk          = true;
 
@@ -55,6 +55,10 @@ public final class ProjectInfoJenkins implements Serializable {
     private String            scmCredentialsId;
 
     private String            mavenHomeSetting = "/home/ci/maven/settings.xml";
+
+    private String            jenkinsLogin;
+
+    private String            jenkinsPassword;
 
     private List<MavenUser>   users;
 
@@ -162,6 +166,22 @@ public final class ProjectInfoJenkins implements Serializable {
 
     public void setUsers(List<MavenUser> users) {
         this.users = users;
+    }
+
+    public String getJenkinsLogin() {
+        return jenkinsLogin;
+    }
+
+    public void setJenkinsLogin(String jenkinsLogin) {
+        this.jenkinsLogin = jenkinsLogin;
+    }
+
+    public String getJenkinsPassword() {
+        return jenkinsPassword;
+    }
+
+    public void setJenkinsPassword(String jenkinsPassword) {
+        this.jenkinsPassword = jenkinsPassword;
     }
 
 }

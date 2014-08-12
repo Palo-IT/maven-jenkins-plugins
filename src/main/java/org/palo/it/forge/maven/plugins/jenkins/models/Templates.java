@@ -26,11 +26,20 @@ package org.palo.it.forge.maven.plugins.jenkins.models;
  * @since 5 août 2014
  */
 public enum Templates implements TemplateName {
-    template_ci, template_release, template_snapshot;
+    template_ci("ci"), template_release("release"), template_snapshot("snapshot");
+
+    private String shortName;
+
+    private Templates(final String shortName) {
+        this.shortName = shortName;
+    }
 
     @Override
     public String getName() {
         return name() + ".ftl";
     }
 
+    public String getShortName() {
+        return shortName;
+    }
 }
